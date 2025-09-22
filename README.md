@@ -1,2 +1,2 @@
-# partuv official demo code
+# PartUV official demo code
 
