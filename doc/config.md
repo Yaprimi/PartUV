@@ -1,7 +1,7 @@
 # **Configuration Overview**
 
-All parameters can be defined in the unified YAML config file, shared across both **C++** and **Python** APIs.
-Users specify the config path when invoking the pipeline.
+All parameters can be specified in a unified YAML configuration file, shared by both the C++ and Python APIs.
+Users can provide the path to this configuration file when invoking the pipeline.
 
 ---
 
