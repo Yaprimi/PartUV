@@ -24,7 +24,7 @@ Official implementation for ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
   - [TL;DR](#tldr)
   - [Step 1: UV Unwrapping](#step-1-uv-unwrapping)
   - [Step 2: Packing](#step-2-packing)
-- [📦 Part-Based Packing with UVPackMaster](#-part-based-packing-with-uvpackmaster)
+  - [Part-Based Packing with UVPackMaster](#part-based-packing-with-uvpackmaster)
 - [📊 Benchmarking](#-benchmarking-)
 - [🧱 Building from Source](#-building-from-source)
 - [🐛 Known Issues](#-known-issues)
