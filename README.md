@@ -9,29 +9,37 @@
 
 Official implementation for ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
 <p align="center"><img src="doc/partuv_teaser.png" width="100%"></p>
----
+
 
 <!-- TOC -->
 <details open>
-  <summary><strong>Table of Contents</strong></summary>
+  <summary><h1>📑 Table of Contents</h1></summary>
 
+
+- [🚧 TODO List](#-todo-list)
 - [Installation](#installation)
   - [PartUV (for UV Unwrapping)](#partuv-for-uv-unwrapping)
   - [Packing with bpy (optional)](#packing-with-bpy-optional)
 - [Demo](#demo)
+  - [TL;DR](#tldr)
   - [Step 1: UV Unwrapping](#step-1-uv-unwrapping)
   - [Step 2: Packing](#step-2-packing)
 - [Part-Based Packing with UVPackMaster](#part-based-packing-with-uvpackmaster)
-- [Benchmarking 🚧](#benchmarking)
-- [Building](#building-from-source)
-- [Common Problems, Acknowledgement, and BibTeX](#common-problems)
+- [Benchmarking 🚧](#benchmarking-)
+- [Building from Source](#building-from-source)
+- [Known Issues](#known-issues)
+- [Common Problems](#common-problems)
+- [Acknowledgement](#-acknowledgement)
+- [BibTeX](#bibtex)
+
 </details>
 <!-- /TOC -->
 
 
 
 
-## 🚧 TODO List 
+
+# 🚧 TODO List 
 - [ ] Resolve the handling of non-2-manifold meshes, see [Known Issues](#known-issues)
 - [ ] Release benchmark code and data
 - [ ] Multi-atlas packing with uvpackmaster
