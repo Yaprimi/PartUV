@@ -17,20 +17,20 @@ Official implementation for ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
 
 
 - [🚧 TODO List](#-todo-list)
-- [Installation](#installation)
+- [🛠️ Installation](#-installation)
   - [PartUV (for UV Unwrapping)](#partuv-for-uv-unwrapping)
   - [Packing with bpy (optional)](#packing-with-bpy-optional)
-- [Demo](#demo)
+- [🚀 Demo](#-demo)
   - [TL;DR](#tldr)
   - [Step 1: UV Unwrapping](#step-1-uv-unwrapping)
   - [Step 2: Packing](#step-2-packing)
-- [Part-Based Packing with UVPackMaster](#part-based-packing-with-uvpackmaster)
-- [Benchmarking 🚧](#benchmarking-)
-- [Building from Source](#building-from-source)
-- [Known Issues](#known-issues)
-- [Common Problems](#common-problems)
-- [Acknowledgement](#-acknowledgement)
-- [BibTeX](#bibtex)
+- [📦 Part-Based Packing with UVPackMaster](#-part-based-packing-with-uvpackmaster)
+- [📊 Benchmarking](#-benchmarking-)
+- [🧱 Building from Source](#-building-from-source)
+- [🐛 Known Issues](#-known-issues)
+- [🔧 Common Problems](#-common-problems)
+- [🍀 Acknowledgement](#-acknowledgement)
+- [🎓 BibTeX](#-bibtex)
 
 </details>
 <!-- /TOC -->
@@ -46,7 +46,7 @@ Official implementation for ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
 - [ ] Blender plugin for PartUV
 
 
-# Installation
+# 🛠️ Installation
 
 ## PartUV (for UV Unwrapping)
 
@@ -86,7 +86,7 @@ pip install bpy==4.0.0 --extra-index-url https://download.blender.org/pypi/
 
 
 
-# Demo
+# 🚀 Demo
 
 ## TL;DR
 
@@ -150,13 +150,13 @@ You can pack all UV charts together to create a UV map for the input mesh. Two p
 
 ---
 
-# Part-Based Packing with UVPackMaster
+## Part-Based Packing with UVPackMaster
 
 In our results, we include both **part-based packing** (where charts from the same part are packed close together) and **automatic multi-atlas packing** (given *N* desired tiles, parts are assigned to tiles according to the hierarchical part tree).
 
 These results are packed using [UVPackMaster](https://uvpackmaster.com/), which unfortunately is a paid tool. We provide scripts to pack the UVs with UVPackMaster.
 
-## Installation
+### Installation
 
 1. **Install BlenderProc:**
    We use BlenderProc to run this add-on within Blender. Please follow the instructions in the [BlenderProc repository](https://github.com/DLR-RM/blenderproc) to install it.
@@ -175,7 +175,7 @@ These results are packed using [UVPackMaster](https://uvpackmaster.com/), which 
    blenderproc run pack/install_uvp.py
    ```
 
-## Usage
+### Usage
 
 To pack UVs with UVPackMaster, use the same command as the default packing method, changing the `--pack_method` flag to `uvpackmaster`:
 
@@ -187,25 +187,25 @@ python demo/partuv_demo.py --mesh_path {input_mesh_path} --pack_method uvpackmas
 
 ---
 
-# Benchmarking 🚧
+# 📊 Benchmarking 🚧
 
 ---
 
 
-# Building from Source
+# 🧱 Building from Source
 
 Please refer to [build.md](doc/build.md) for detailed build instructions.
 
 ---
 
-# Known Issues
+# 🐛 Known Issues
 
 ### Handling of non-2-manifold meshes
 
 The ABF assumes the mesh is 2-manifold (each edge is incident to at most two faces). This is currently handled in the preprocessing step, by splitting vertices on non-manifold edges. However, this may create split faces which could result in single-face UV charts. We are working on a better solution to handle this.
 
 
-# Common Problems
+# 🔧 Common Problems
 
 Below are common issues and their solutions:
 
@@ -249,7 +249,7 @@ and all the libraries in the `extern/` folder.
 
 ---
 
-# BibTeX
+# 🎓 BibTeX
 
 If this repository helps your research or project, please consider citing our work:
 
