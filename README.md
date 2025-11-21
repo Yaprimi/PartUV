@@ -40,7 +40,7 @@ Official implementation for ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
 
 
 # 🚧 TODO List 
-- [ ] Resolve the handling of non-2-manifold meshes, see [Known Issues](#known-issues)
+- [ ] Resolve the handling of non-2-manifold meshes, see [Known Issues](#-known-issues)
 - [ ] Release benchmark code and data
 - [ ] Multi-atlas packing with uvpackmaster
 - [ ] Blender plugin for PartUV
