@@ -261,3 +261,8 @@ If this repository helps your research or project, please consider citing our wo
   year      = {2025}
 }
 ```
+
+
+# 📝 License
+
+This project is released under the Apache License 2.0, and the code in the `preprocess_utils/partfield_official/` folder is licensed under the NVIDIA License. See [LICENSE](LICENSE) for details.
