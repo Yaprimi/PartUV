@@ -1052,8 +1052,9 @@ UVParts pipeline(const std::string &tree_filename, const std::string &mesh_filen
     individual_parts = allParts;
     EASY_END_BLOCK;
     profiler::dumpBlocksToFile("test_profile.prof");
-    std::cout << "saving hierarchy to " << CONFIG_outputPath + "/hierarchy.json" << std::endl;
-    g_hierarchy.save(CONFIG_outputPath + "/hierarchy.json");
+    // std::cout << "saving hierarchy to " << CONFIG_outputPath + "/hierarchy.json" << std::endl;
+    // g_hierarchy.save(CONFIG_outputPath + "/hierarchy.json");
+    final_parts.hierarchy = g_hierarchy;
     return final_parts;
 
 }
@@ -1176,8 +1177,8 @@ UVParts pipeline(const Eigen::MatrixXd& V,
         individual_parts = allParts;
         EASY_END_BLOCK;
         // profiler::dumpBlocksToFile("test_profile.prof");
-        std::cout << "saving hierarchy to " << CONFIG_outputPath + "/hierarchy.json" << std::endl;
-        g_hierarchy.save(CONFIG_outputPath + "/hierarchy.json");
+        // std::cout << "saving hierarchy to " << CONFIG_outputPath + "/hierarchy.json" << std::endl;
+        // g_hierarchy.save(CONFIG_outputPath + "/hierarchy.json");
         for (auto& comp : final_parts.components) {
             normalize_uv_by_3d_area(comp);
         }
@@ -1190,5 +1191,7 @@ UVParts pipeline(const Eigen::MatrixXd& V,
         //     wrapper.add_component(UV_component, 0, false);
         //     UV_component.UV = wrapper.runPacking();
         // }
-        return UVParts({UV_component}); 
+        UVParts return_parts = UVParts({UV_component}); 
+        return_parts.hierarchy = g_hierarchy;
+        return return_parts;
 }

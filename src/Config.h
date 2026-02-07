@@ -25,6 +25,7 @@ public:
     int         unwrapAbfIters;
     int         unwrapAggParts;   // NEW: Default set to 10
     bool        unwrapPamo;
+    int         unwrapUsePamoFaceThreshold; // use pamo if the face count is greater than this threshold (default: 1000)
 
     // Global verbose flag.
     bool verbose;
@@ -58,7 +59,8 @@ public:
           saveStuff(false),
           log_traverse_csv(false),
           num_omp_threads(8),
-          num_cuda_streams(10)
+          num_cuda_streams(10),
+          unwrapUsePamoFaceThreshold(1000)
     {}
 
     // Singleton accessor: created on first use.
@@ -122,6 +124,7 @@ public:
                     num_omp_threads = pipelineNode["num_omp_threads"].as<int>();
                 if (pipelineNode["num_cuda_streams"])
                     num_cuda_streams = pipelineNode["num_cuda_streams"].as<int>();
+
             }
 
             // Extract unwrap configuration.
@@ -135,6 +138,8 @@ public:
                     unwrapAggParts = unwrapNode["agg_parts"].as<int>();
                 if (unwrapNode["pamo"])
                     unwrapPamo = unwrapNode["pamo"].as<bool>();
+                if (unwrapNode["usePamoFaceThreshold"])
+                    unwrapUsePamoFaceThreshold = unwrapNode["usePamoFaceThreshold"].as<int>();
             }
 
             // Extract verbose configuration.
@@ -193,6 +198,7 @@ public:
         std::cout << "[CONFIG] unwrap.method: " << unwrapMethod << "\n";
         std::cout << "[CONFIG] unwrap.abf_iters: " << unwrapAbfIters << "\n";
         std::cout << "[CONFIG] unwrap.pamo: " << std::boolalpha << unwrapPamo << "\n";
+        std::cout << "[CONFIG] unwrap.usePamoFaceThreshold: " << unwrapUsePamoFaceThreshold << "\n";
         std::cout << "[CONFIG] unwrap.agg_parts: " << unwrapAggParts << "\n";  // NEW: Print unwrapAggParts
 
         std::cout << "[CONFIG] verbose: " << std::boolalpha << verbose << "\n";
@@ -220,6 +226,7 @@ inline bool&        CONFIG_checkNon2Manifold     = ConfigManager::instance().che
 inline std::string& CONFIG_unwrapMethod         = ConfigManager::instance().unwrapMethod;
 inline int&         CONFIG_unwrapAbfIters       = ConfigManager::instance().unwrapAbfIters;
 inline bool&        CONFIG_unwrapPamo           = ConfigManager::instance().unwrapPamo;
+inline int&         CONFIG_unwrapUsePamoFaceThreshold = ConfigManager::instance().unwrapUsePamoFaceThreshold;
 // End of Selection
 
 inline int&         CONFIG_unwrapAggParts       = ConfigManager::instance().unwrapAggParts;  // NEW: Global inline variable

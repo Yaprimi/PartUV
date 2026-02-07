@@ -13,7 +13,7 @@ from   .partfield.model_trainer_pvcnn_only_demo import Model  # Replace with the
 from   .AgglomerativeClustering import solve_clustering_mesh, get_tree_leaves, solve_clustering_mesh_pf20
 # import line_profiler
 import time
-from safetensors.torch import save_file, load_file
+
 from pathlib import Path
 from typing import Optional, Union
 from importlib.resources import files, as_file

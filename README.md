@@ -3,50 +3,46 @@
 <h3 align="center">SIGGRAPH Asia 2025</h3> 
 
 <p align="center">
-<a href="https://arxiv.org/abs/2511.16659"><img src="https://img.shields.io/badge/arXiv-Paper-red?logo=arxiv&logoColor=white" alt="arXiv"></a>
+<a href="#"><img src="https://img.shields.io/badge/arXiv-Paper-red?logo=arxiv&logoColor=white" alt="arXiv"></a>
 <a href="https://www.zhaoningwang.com/PartUV"><img src="https://img.shields.io/badge/Project_Page-Website-green?logo=googlechrome&logoColor=white" alt="Project Page"></a>
 </p>
 
-Official implementation for ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
+Official implementation of ***PartUV: Part-Based UV Unwrapping of 3D Meshes***.
 <p align="center"><img src="doc/partuv_teaser.png" width="100%"></p>
-
+---
 
 <!-- TOC -->
 <details open>
-  <summary><h1>📑 Table of Contents</h1></summary>
+  <summary><strong>Table of Contents</strong></summary>
 
-
-- [🚧 TODO List](#-todo-list)
-- [🛠️ Installation](#-installation)
+- [Installation](#installation)
   - [PartUV (for UV Unwrapping)](#partuv-for-uv-unwrapping)
   - [Packing with bpy (optional)](#packing-with-bpy-optional)
-- [🚀 Demo](#-demo)
-  - [TL;DR](#tldr)
+- [Demo](#demo)
   - [Step 1: UV Unwrapping](#step-1-uv-unwrapping)
   - [Step 2: Packing](#step-2-packing)
-  - [Part-Based Packing with UVPackMaster](#part-based-packing-with-uvpackmaster)
-- [📊 Benchmarking](#-benchmarking-)
-- [🧱 Building from Source](#-building-from-source)
-- [🐛 Known Issues](#-known-issues)
-- [🔧 Common Problems](#-common-problems)
-- [🍀 Acknowledgement](#-acknowledgement)
-- [🎓 BibTeX](#-bibtex)
-
+- [Part-Based Packing with UVPackMaster](#part-based-packing-with-uvpackmaster)
+- [Benchmarking](#benchmarking)
+- [Building](#building-from-source)
+- [Common Problems, Acknowledgement, and BibTeX](#common-problems)
 </details>
 <!-- /TOC -->
 
 
 
 
-
-# 🚧 TODO List 
-- [ ] Resolve the handling of non-2-manifold meshes, see [Known Issues](#-known-issues)
+<!-- ## 🚧 TODO List 
+- [ ] Resolve the handling of non-2-manifold meshes, see [Known Issues](#known-issues)
 - [ ] Release benchmark code and data
 - [ ] Multi-atlas packing with uvpackmaster
-- [ ] Blender plugin for PartUV
+- [ ] Blender plugin for PartUV -->
+## TODO List 
+- [✅] Resolve the handling of non-2-manifold meshes, see [Known Issues](#known-issues)
+- [✅] Release benchmark code and data
+- [✅] Multi-atlas packing with uvpackmaster
 
 
-# 🛠️ Installation
+# Installation
 
 ## PartUV (for UV Unwrapping)
 
@@ -61,7 +57,7 @@ conda activate partuv
 pip install torch==2.7.1 --index-url https://download.pytorch.org/whl/cu128
 pip install torch-scatter -f https://data.pyg.org/whl/torch-2.7.1+cu128.html
 
-# 3) Install project requirements
+# 3) Install project requirements and local wheel
 pip install -r requirements.txt
 pip install partuv
 ```
@@ -86,7 +82,7 @@ pip install bpy==4.0.0 --extra-index-url https://download.blender.org/pypi/
 
 
 
-# 🚀 Demo
+# Demo
 
 ## TL;DR
 
@@ -104,7 +100,7 @@ python -m pack.pack --partuv_output_path {partuv_output_folder} --save_visuals -
 
 The demo takes a 3D mesh (e.g., .obj or .glb) as input and outputs the mesh with unwrapped UVs in a non-packed format.
 
-### Input Requirement
+### Input Requirements
 
 We recommend using meshes without 3D self-intersections and non-2-manifold edges, as they may result in highly fragmented UVs.
 
@@ -117,7 +113,7 @@ The input mesh is first preprocessed, including:
 * Running PartField to obtain the hierarchical part tree
 
 ### Unwrapping
-We then call our pre-built pip wheels for unwrapping. Two main API versions are provided:
+We then run the unwrapping pipeline via our prebuilt pip wheels. Two main API versions are provided:
 
 * **`pipeline_numpy`**: The default version. It takes mesh NumPy arrays (`V` and `F`), the PartField dictionary (a hierarchical tree), a configuration file path, and a distortion threshold as input. Note that the distortion threshold specified here will override the value defined in the configuration file.
 * **`pipeline`**: Similar to `pipeline_numpy`, but it takes file paths as input and performs I/O operations directly from disk.
@@ -131,7 +127,7 @@ Individual parts are also saved as `part_{i}.obj`, which can be used with UVPack
 
 The saving behavior can be configured in the [`save_results`](demo/partuv_demo.py#L119) function.
 
-If you specify the `--pack_method` flags, the code will pack the UVs and save the final mesh in `final_packed.obj`.
+If you specify the `--pack_method` flag, the code will pack the UVs and save the final mesh in `final_packed.obj`.
 
 ### Hyperparameters
 
@@ -150,13 +146,13 @@ You can pack all UV charts together to create a UV map for the input mesh. Two p
 
 ---
 
-## Part-Based Packing with UVPackMaster
+# Part-Based Packing with UVPackMaster
 
 In our results, we include both **part-based packing** (where charts from the same part are packed close together) and **automatic multi-atlas packing** (given *N* desired tiles, parts are assigned to tiles according to the hierarchical part tree).
 
 These results are packed using [UVPackMaster](https://uvpackmaster.com/), which unfortunately is a paid tool. We provide scripts to pack the UVs with UVPackMaster.
 
-### Installation
+## Installation
 
 1. **Install BlenderProc:**
    We use BlenderProc to run this add-on within Blender. Please follow the instructions in the [BlenderProc repository](https://github.com/DLR-RM/blenderproc) to install it.
@@ -175,7 +171,7 @@ These results are packed using [UVPackMaster](https://uvpackmaster.com/), which 
    blenderproc run pack/install_uvp.py
    ```
 
-### Usage
+## Usage
 
 To pack UVs with UVPackMaster, use the same command as the default packing method, changing the `--pack_method` flag to `uvpackmaster`:
 
@@ -183,29 +179,66 @@ To pack UVs with UVPackMaster, use the same command as the default packing metho
 python demo/partuv_demo.py --mesh_path {input_mesh_path} --pack_method uvpackmaster --save_visuals
 ```
 
-## Multi-Atlas Packing 🚧
+## Multi-Atlas Packing 
+
+We also implement multi-atlas packing with UVPackMaster (which requires UVPackMaster to be installed and licensed like above). To use it, specify the `--num_atlas` flag:
+
+```bash
+python demo/partuv_demo.py --mesh_path {input_mesh_path} --pack_method uvpackmaster --save_visuals --num_atlas {num_atlas}
+```
+
+The script will pack the UVs into the specified number of atlases automatically based on the hierarchical part tree.
 
 ---
 
-# 📊 Benchmarking 🚧
+# Benchmarking 
 
 ---
 
+We provide 4 datasets for benchmarking:
+- PartObjaverse-Tiny
+- common-meshes
+- Trellis
+- ABC
 
-# 🧱 Building from Source
+You can run the benchmark script by:
+```bash
+bash demo/benchmark/benchmark.sh
+```
+
+The script will run the benchmark on the 4 datasets and save the results to the `output_meshes_python` folder.
+
+One example file structure is as follows:
+```
+ABC-benchmark/
+├── ABC-benchmark/
+│   └── mesh_id/
+        ├── final_packed.obj
+        ├── Other Final Results...
+    ...
+├── output/
+    ├── mesh_id/
+    |   └── Intermediate Results...
+    ...
+```
+
+The script then evaluates the metrics on the final results, and generate a report in the `html` and `json` folders. 
+
+# Building from Source
 
 Please refer to [build.md](doc/build.md) for detailed build instructions.
 
 ---
 
-# 🐛 Known Issues
+# Known Issues
 
-### Handling of non-2-manifold meshes
+### Handling non-2-manifold meshes
 
-The ABF assumes the mesh is 2-manifold (each edge is incident to at most two faces). This is currently handled in the preprocessing step, by splitting vertices on non-manifold edges. However, this may create split faces which could result in single-face UV charts. We are working on a better solution to handle this.
+ABF expects 2-manifold meshes. The previous preprocessing strategy (vertex-splitting at non-manifold edges) could sometimes yield undesirable UV charts.
 
+**Update:** Non-manifold edges are now split as UV seams (similar to Blender), which typically improves results on non-2-manifold inputs. Meshes with severe non-manifold structure may still require cleanup.
 
-# 🔧 Common Problems
+# Common Problems
 
 Below are common issues and their solutions:
 
@@ -235,8 +268,7 @@ Remove `compute_120` from the `CMAKE_CUDA_ARCHITECTURES` in `CMakeLists.txt`.
 
 ---
 
-# 🍀 Acknowledgement
-
+# 🍀 Acknowledgments
 We acknowledge the following repositories for their contributions and code:
 
 * [PartField](https://github.com/nv-tlabs/PartField)
@@ -249,7 +281,7 @@ and all the libraries in the `extern/` folder.
 
 ---
 
-# 🎓 BibTeX
+# BibTeX
 
 If this repository helps your research or project, please consider citing our work:
 
@@ -261,8 +293,3 @@ If this repository helps your research or project, please consider citing our wo
   year      = {2025}
 }
 ```
-
-
-# 📝 License
-
-This project is released under the Apache License 2.0, and the code in the `preprocess_utils/partfield_official/` folder is licensed under the NVIDIA License. See [LICENSE](LICENSE) for details.

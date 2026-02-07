@@ -28,6 +28,7 @@ constexpr int MAX_CHARTS = std::numeric_limits<int>::max()/2;
  struct UVParts {
 
     std::vector<Component> components;
+    Hierarchy hierarchy;
 
     double distortion;
 

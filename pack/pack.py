@@ -134,31 +134,44 @@ def get_mesh_hash(tri_mesh):
     # Generate the MD5 hash
     return hashlib.md5(vert_bytes).hexdigest()
 
-def pack_mesh(mesh_path, uvpackmaster=False, save_visuals=False, eval_mesh=False):
+def pack_mesh(partuv_output_path, uvpackmaster=False, save_visuals=False, eval_mesh=False, num_atlas=None):
     time1 = time.time()
     time_dict = {}
 
     if uvpackmaster:
-        # print(f"Running blenderproc to pack mesh: {mesh_path}")
+        # print(f"Running blenderproc to pack mesh: {partuv_output_path}")
         current_file = os.path.abspath(__file__)
-        uvpackmaster_script = os.path.join(os.path.dirname(current_file), "pack_parts.py")
-        subprocess.run(
-            ["blenderproc", "run", uvpackmaster_script, "--input_dir", os.path.join(mesh_path, "individual_parts")],
-            stdout=sys.stdout,
-            stderr=subprocess.STDOUT,
-            check=True
-        )
+        if num_atlas is not None and num_atlas > 1:
+            uvpackmaster_script = os.path.join(os.path.dirname(current_file), "pack_multiAtlas.py")
+            subprocess.run(
+                ["blenderproc", "run", uvpackmaster_script, "--input_dir", partuv_output_path, "--num_atlas", str(num_atlas)],
+                stdout=sys.stdout,
+                stderr=subprocess.STDOUT,
+                check=True
+            )
+        else:
+            if num_atlas is not None and num_atlas > 1:
+                print("Warning: num_atlas is not supported for single atlas packing with blender. Running single atlas packing instead.")
+            uvpackmaster_script = os.path.join(os.path.dirname(current_file), "pack_parts.py")
+            subprocess.run(
+                ["blenderproc", "run", uvpackmaster_script, "--input_dir", os.path.join(partuv_output_path, "individual_parts")],
+                stdout=sys.stdout,
+                stderr=subprocess.STDOUT,
+                check=True
+            )
     else:
         from pack.pack_blender import pack_blender
-        pack_blender(mesh_path)
+        pack_blender(partuv_output_path)
         
     time_pack_ms = (time.time() - time1) * 1000.0
     time_dict["pack_ms"] = time_pack_ms
     if save_visuals:
         time_save_visuals_start = time.time()
-        all_parts = [trimesh.load(os.path.join(mesh_path, f)) for f in os.listdir(mesh_path) if f.endswith("_packed.obj")]
+        all_parts = [trimesh.load(os.path.join(partuv_output_path, "individual_parts", f)) for f in os.listdir(os.path.join(partuv_output_path, "individual_parts")) if f.endswith("_packed.obj")]
+        if len(all_parts) == 0:
+            all_parts = [trimesh.load(os.path.join(partuv_output_path, "final_packed.obj"))]
+        
         colors = generate_unique_colors(len(all_parts))
-
         hash_color = {}
 
         for color, mesh_file in zip(colors, all_parts):
@@ -171,12 +184,10 @@ def pack_mesh(mesh_path, uvpackmaster=False, save_visuals=False, eval_mesh=False
                 hash_color[h] = color
 
 
-        uv_mesh = trimesh.load(os.path.join(mesh_path, "final_packed.obj"))
-        
-            
+        uv_mesh = trimesh.load(os.path.join(partuv_output_path, "final_packed.obj"))
             
         uv_mesh.visual.uv = normalize_uv_charts([uv_mesh.visual.uv])[0]
-        # uv_mesh.export(os.path.join(mesh_path, "final_packed.obj"))
+        # uv_mesh.export(os.path.join(partuv_output_path, "final_packed.obj"))
 
         uv_mesh_components = uv_mesh.split(only_watertight=False)
 
@@ -195,12 +206,12 @@ def pack_mesh(mesh_path, uvpackmaster=False, save_visuals=False, eval_mesh=False
         
         method = "uvpackmaster" if uvpackmaster else "blender"
         
-        save_uv_layout_with_packing(uv_mesh_components, all_uv, os.path.join(mesh_path, f"final_packed_uv_{method}.png"), mode=new_uv_color,
+        save_uv_layout_with_packing(uv_mesh_components, all_uv, os.path.join(partuv_output_path, f"final_packed_uv_{method}.png"), mode=new_uv_color,
                                     image_size=8192, save_image=True)
-        save_uv_layout_with_packing(uv_mesh_components, all_uv, os.path.join(mesh_path, f"distortion_{method}.png"), mode='area',
+        save_uv_layout_with_packing(uv_mesh_components, all_uv, os.path.join(partuv_output_path, f"distortion_{method}.png"), mode='area',
                                 image_size=8192, save_image=True)
         
-        print(f"saved uv layout to {os.path.join(mesh_path, f'final_packed_uv_{method}.png')}")
+        print(f"saved uv layout to {os.path.join(partuv_output_path, f'final_packed_uv_{method}.png')}")
 
         # Only save the mesh_color.ply if uvpackmaster is used and we have part information
         if uvpackmaster:
@@ -208,13 +219,13 @@ def pack_mesh(mesh_path, uvpackmaster=False, save_visuals=False, eval_mesh=False
             mesh_colored = trimesh.Trimesh(vertices=mesh_colored.vertices, faces=mesh_colored.faces, 
                                             face_colors=mesh_colored.visual.face_colors)
             calculate_uv_utilization(uv_mesh)
-            mesh_colored.export(os.path.join(mesh_path, "mesh_color.ply"))
+            mesh_colored.export(os.path.join(partuv_output_path, "mesh_color.ply"))
         time_save_visuals_end = time.time()
         time_save_visuals_ms = (time_save_visuals_end - time_save_visuals_start) * 1000.0
         time_dict["save_visuals_ms"] = time_save_visuals_ms
         
     if eval_mesh:
-        metrics = evaluate_mesh(os.path.join(mesh_path, "final_packed.obj"))
+        metrics = evaluate_mesh(os.path.join(partuv_output_path, "final_packed.obj"))
         print(metrics)
 
     return time_dict
@@ -226,9 +237,10 @@ def main():
     parser.add_argument("--uvpackmaster", '-U', action="store_true")
     parser.add_argument("--save_visuals", '-S', action="store_true")
     parser.add_argument("--eval_mesh", '-E', action="store_true", default=False, help="Evaluate the mesh after packing")
+    parser.add_argument("--num_atlas", '-N', type=int, default=None, help="Number of atlas to pack if multi-atlas packing is used")
     args = parser.parse_args()
 
-    pack_mesh(args.partuv_output_path, args.uvpackmaster, args.save_visuals, args.eval_mesh)
+    pack_mesh(**vars(args))
 
 if __name__ == "__main__":
     main()

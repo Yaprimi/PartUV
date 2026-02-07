@@ -242,6 +242,7 @@ def calculate_distortion_area(vertices, faces, uvs, distortion_normalized=False)
 
         distortion = ratio  / total_ratio
         if distortion == 0:
+            # skipped for now and report in zero_area_face metric
             continue
 
         if distortion_normalized:

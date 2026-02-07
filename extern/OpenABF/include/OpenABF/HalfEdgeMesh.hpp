@@ -461,6 +461,8 @@ public:
         /** @brief Insertion index */
         std::size_t idx;
 
+        bool is_manifold{true};
+
 
 
         T alpha_grad_cache{0};
@@ -750,9 +752,9 @@ public:
                     std::string msg = 
                         "Resolved edge pair already paired. Edge (" +
                         std::to_string(tailIdx) + ", " +
-                        std::to_string(headIdx) + ") is not 2-manifold.";
-                    // std::cerr << msg << std::endl;
-                    throw MeshException(msg);
+                        std::to_string(headIdx) + ") is not 2-manifold. insert_face_2";
+                    std::cerr << msg << std::endl;
+                    // throw MeshException(msg);
                     // return -1;  // Or throw, depending on your style
                 }
             }
@@ -785,10 +787,20 @@ public:
             // Attempt to find the existing “opposite” edge
             // i.e., an edge from headIdx -> tailIdx
             auto pair = find_edge_(headIdx, tailIdx);
-            if (pair) {
-                // Set mutual pairing
-                e->pair   = pair;
-                pair->pair = e;
+            if (pair && pair->is_manifold) {
+                if (pair->pair) {
+                    pair->pair->pair = nullptr;
+                    pair->pair->is_manifold = false;
+
+                    pair->pair = nullptr;
+                    pair->is_manifold = false;
+
+                    e->is_manifold = false;
+                }else{
+                    // Set mutual pairing
+                    e->pair   = pair;
+                    pair->pair = e;
+                }
             }
         }
 

@@ -241,10 +241,12 @@ def evaluate_mesh(obj_path, output_dir = None,  chart_num_as_filename=True, plot
             else:
                 edge_map[edge] = face_idx
 
+
     # Count distinct connected components by counting unique "roots"
     roots = set()
     for i in range(len(faces_uv_indices)):
         roots.add(uf.find(i))
+    chart_number = len(roots)
 
     # save uv layout with distortion
     charts = defaultdict(list)
@@ -254,15 +256,15 @@ def evaluate_mesh(obj_path, output_dir = None,  chart_num_as_filename=True, plot
     
     all_distortions = []
     total_distortion = 0
-    
+    has_zero_area_face = False
+        
     for i,chart in enumerate(chart_list):
         distortion = calculate_distortion_area(mesh.vertices, mesh.faces[chart], uv_data)
         all_distortions += [distortion]
-        # if distortion > 2:
-        #     print([calculate_3d_face_area(mesh.vertices, face) for face in mesh.faces[chart]])
-        #     distortion = calculate_distortion_area(mesh.vertices, mesh.faces[chart], uv_data, multiplier=100000)
-            
-            
+        
+        if any(area  < 1e-10 for area in [calculate_3d_face_area(mesh.vertices, face) for face in mesh.faces[chart]]):
+            has_zero_area_face = True
+
 
         total_distortion +=  distortion * len(chart)
         
@@ -335,6 +337,7 @@ def evaluate_mesh(obj_path, output_dir = None,  chart_num_as_filename=True, plot
         "L2_invalid": bool(L2_invalid),
         "Linf_invalid": bool(Linf_invalid),
         "num_invalid": int(num_invalid) ,
+        "has_zero_area_face": has_zero_area_face,
     }
     
     return result

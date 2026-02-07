@@ -93,7 +93,8 @@ def save_results(output_dir: str | Path, final_parts, individual_parts):
         total_components += part.num_components
         # if comp.distortion > 1.5:
         # print(f"Part {i} has {part.num_components} charts and distortion {comp.distortion}")
-
+    with open(output_dir / "hierarchy.json", "w") as f:
+        f.write(final_parts.hierarchy_json)
     UV_component = final_parts.to_components()
     print(f"# of V: {UV_component.V.shape[0]}")
     print(f"# of F: {UV_component.F.shape[0]}")

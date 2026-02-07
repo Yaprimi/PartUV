@@ -666,7 +666,7 @@ int unwrap_pamo( Eigen::MatrixXd &V,
     else if(lscm_method == "abf")
     {
         try {
-            if(CONFIG_unwrapPamo && F.rows() > 1000){
+            if(CONFIG_unwrapPamo && F.rows() > CONFIG_unwrapUsePamoFaceThreshold){
                 success =  abf_unwrap_pamo(V, F, UVc, CONFIG_unwrapAbfIters, stream);
             }else{
                 success =  abf_unwrap(V, F, UVc, CONFIG_unwrapAbfIters);

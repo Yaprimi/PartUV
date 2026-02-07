@@ -108,6 +108,10 @@ PYBIND11_MODULE(_core, m)
         .def_readwrite("components",     &UVParts::components)
         .def_readwrite("distortion",     &UVParts::distortion)
         .def_readwrite("num_components", &UVParts::num_components)
+        .def_property_readonly(
+            "hierarchy_json",
+            [](const UVParts& p) { return p.hierarchy.to_json().dump(); }
+        )
         .def("getUV",        &UVParts::getUV)
         .def("getNumFaces",  &UVParts::getNumFaces)
         .def("to_components",&UVParts::to_components)

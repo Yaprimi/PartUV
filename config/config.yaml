@@ -18,3 +18,4 @@ unwrap:
   abf_iters: 5
   agg_parts: 10
   pamo: true
+  usePamoFaceThreshold: 1000
