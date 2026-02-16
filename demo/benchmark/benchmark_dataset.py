@@ -284,7 +284,7 @@ def unwrap_one(mesh_path, final_root, cfg_path, pf_model, threads, pack_method, 
     # Clean previous run pack_path
     shutil.rmtree(pack_path, ignore_errors=True)
 
-    pipeline_times = run_pipeline_and_pack(V, F, tree_dict, cfg_path, pack_path, threads, pipeline_log, pack_method)
+    pipeline_times = run_pipeline_and_pack(V, F, tree_dict, cfg_path, pack_path, pack_method)
 
     module_times.update(pipeline_times)
     # Gather outputs
