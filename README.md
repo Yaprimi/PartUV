@@ -272,10 +272,11 @@ Remove `compute_120` from the `CMAKE_CUDA_ARCHITECTURES` in `CMakeLists.txt`.
 We acknowledge the following repositories for their contributions and code:
 
 * [PartField](https://github.com/nv-tlabs/PartField)
+* [PAMO](https://github.com/SarahWeiii/pamo)
 * [OpenABF](https://github.com/educelab/OpenABF)
 * [MeshSimplificationForUnfolding](https://git.ista.ac.at/mbhargav/mesh-simplification-for-unfolding)
 * [LSCM](https://github.com/icemiliang/lscm)
-* [PAMO](https://github.com/SarahWeiii/pamo)
+* [easy_profiler](https://github.com/yse/easy_profiler)
 
 and all the libraries in the `extern/` folder.
 
