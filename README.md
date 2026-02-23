@@ -201,6 +201,8 @@ We provide 4 datasets for benchmarking:
 - Trellis
 - ABC
 
+The meshes can be downloaded via Google Drive [Here](https://drive.google.com/file/d/13rGYMHmu_PAPHdmzA-6S728nivk095QJ/view?usp=sharing)
+
 You can run the benchmark script by:
 ```bash
 bash demo/benchmark/benchmark.sh
