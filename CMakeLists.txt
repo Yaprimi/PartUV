@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
+include_directories("D:/Cpp/vcpkg/installed/x64-windows/include")
 
 # set(ENV{NVCC_PREPEND_FLAGS} "--allow-unsupported-compiler")
 # # (Optional) also initialize CMake's CUDA flags with it
@@ -13,13 +14,39 @@ if(NOT DEFINED CMAKE_CUDA_COMPILER)
   endif()
 endif()
 
-project(partuv LANGUAGES CXX CUDA)
+# project(partuv LANGUAGES CXX CUDA)
+project(partuv LANGUAGES CXX)
+
+# Place this near the top, after the project() call
+if(MSVC)
+    # Global definitions
+    add_compile_definitions(
+        P_NATIVE_CPP_TYPE
+        _HAS_STD_BYTE=0
+        _CRT_SECURE_NO_WARNINGS
+        NOMINMAX
+        _USE_MATH_DEFINES
+        CUDA_API_PER_THREAD_DEFAULT_STREAM
+        IGL_NO_SSE               # Bypasses the missing raytri.c
+        IGL_HEADER_ONLY          # The key to fixing those 14 Linker errors
+        LIBIGL_USE_STATIC_LIBRARY=0
+    )
+
+    # Standard compliance and architecture flags
+    string(APPEND CMAKE_CXX_FLAGS " /permissive- /Zc:__cplusplus /arch:SSE2 /Zc:lambda")
+    string(APPEND CMAKE_CUDA_FLAGS " -Xcompiler=/permissive-,/Zc:__cplusplus,/arch:SSE2")
+endif()
+
+enable_language(CUDA)
 
 # Set up shared dependencies at the root level
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-set(CMAKE_CUDA_STANDARD 14)
+# set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 # add_compile_definitions(CUDA_API_PER_THREAD_DEFAULT_STREAM=1)
 add_compile_definitions(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -47,7 +74,9 @@ set(LIBIGL_INCLUDE_DIR ${EXTERNAL_DIR}/libigl/include)
 set(EIGEN_INCLUDE_DIR ${EXTERNAL_DIR}/eigen-3.4.0)
 set(OPENABF_INCLUDE_DIR ${EXTERNAL_DIR}/OpenABF/include)
 set(STB_INCLUDE_DIR ${EXTERNAL_DIR}/stb)
-set(NLOHMANN_JSON_INCLUDE_DIR ${EXTERNAL_DIR}/json/include)
+# set(NLOHMANN_JSON_INCLUDE_DIR ${EXTERNAL_DIR}/json/include)
+
+find_package(nlohmann_json CONFIG REQUIRED)
 
 # set(UVPSDK_ROOT "${EXTERNAL_DIR}/uvpackmaster"          # extern/uvpackmaster
 #     CACHE PATH "Path to UVPackmaster SDK (include/ + lib/)")
@@ -75,10 +104,11 @@ set(NLOHMANN_JSON_INCLUDE_DIR ${EXTERNAL_DIR}/json/include)
 # Make these paths available to all subprojects
 include_directories(
     ${LIBIGL_INCLUDE_DIR}
+	${LIBIGL_INCLUDE_DIR}/../external/sse2
     ${EIGEN_INCLUDE_DIR}
     ${STB_INCLUDE_DIR}
     ${OPENABF_INCLUDE_DIR}
-    ${NLOHMANN_JSON_INCLUDE_DIR}
+    # ${NLOHMANN_JSON_INCLUDE_DIR}
 )
 
 # include_directories(${EXTERNAL_DIR}/pybind11/include)
@@ -86,30 +116,42 @@ include_directories(
 # Find common dependencies
 
 find_package(CGAL REQUIRED)
-find_package(easy_profiler REQUIRED
-    HINTS "${CMAKE_CURRENT_SOURCE_DIR}/extern/easy_profiler/lib/cmake/easy_profiler"
-) 
-get_target_property(_EP_SO easy_profiler IMPORTED_LOCATION_RELEASE)
-if(NOT _EP_SO)
-  get_target_property(_EP_SO easy_profiler IMPORTED_LOCATION)  # fallback if only generic set
-endif()
-install(FILES "${_EP_SO}" DESTINATION partuv/.libs)
+# find_package(easy_profiler REQUIRED
+#     HINTS "${CMAKE_CURRENT_SOURCE_DIR}/extern/easy_profiler/lib/cmake/easy_profiler"
+# ) 
+# get_target_property(_EP_SO easy_profiler IMPORTED_LOCATION_RELEASE)
+# if(NOT _EP_SO)
+#   get_target_property(_EP_SO easy_profiler IMPORTED_LOCATION)  # fallback if only generic set
+# endif()
+# install(FILES "${_EP_SO}" DESTINATION partuv/.libs)
 
 find_package(yaml-cpp REQUIRED)
-find_package(OpenMP REQUIRED)
-find_package(TBB REQUIRED)
+
+# Tell CMake that for the CUDA language, we don't need to find OpenMP
+set(OpenMP_CUDA_FOUND TRUE CACHE BOOL "" FORCE)
+set(OpenMP_CUDA_FLAGS " " CACHE STRING "" FORCE)
+set(OpenMP_CUDA_LIBRARIES " " CACHE STRING "" FORCE)
+
+find_package(OpenMP REQUIRED COMPONENTS CXX)
+
+find_package(TBB CONFIG REQUIRED)
 find_package(CUDAToolkit REQUIRED) 
 
-# Find pybind11 for Python bindings
 find_package(pybind11 CONFIG REQUIRED)
-
+find_package(libigl CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
 
 
 # Add the LSCM library subdirectory
 add_subdirectory(${SRC_DIR}/lscm)
-target_compile_options(lscm_lib PUBLIC -fPIC)
+if(NOT MSVC)
+    target_compile_options(lscm_lib PUBLIC -fPIC)
+endif()
+
 add_subdirectory(${SRC_DIR}/triangle_intersection)
-target_compile_options(triangle_intersection PUBLIC -fPIC)
+if(NOT MSVC)
+    target_compile_options(triangle_intersection PUBLIC -fPIC)
+endif()
 
 
 
@@ -162,9 +204,11 @@ target_compile_options(_core PRIVATE
 # Link the Python module with the same dependencies as the main executable
 target_link_libraries(_core
     PUBLIC
-        easy_profiler
+        # easy_profiler
         # uvpcore_sdk          
     PRIVATE
+		Eigen3::Eigen
+		nlohmann_json::nlohmann_json
         lscm_lib
         triangle_intersection
         OpenMP::OpenMP_CXX
@@ -180,7 +224,7 @@ target_include_directories(_core PRIVATE
     ${EIGEN_INCLUDE_DIR}
     ${STB_INCLUDE_DIR}
     ${OPENABF_INCLUDE_DIR}
-    ${NLOHMANN_JSON_INCLUDE_DIR}
+    # ${NLOHMANN_JSON_INCLUDE_DIR}
 )
 
 # --- Add at the end of CMakeLists.txt ---

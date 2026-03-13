@@ -1,3 +1,11 @@
+#ifdef _WIN32
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+#endif
+
+#include <ciso646>
+
 //2D Triangle-Triangle collisions in C++
 //Release by Tim Sheerman-Chase 2016 under CC0
 // https://gist.github.com/TimSC/5ba18ae21c4459275f90

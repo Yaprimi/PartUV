@@ -64,7 +64,7 @@ struct EdgeCompare
             int e2max = std::max(e2.i, e2.j);
             if (e1max == e2max)
             {
-                return std::min(e1.i, e1.j) > std::min(e2.i, e2.j);
+                return (std::min)(e1.i, e1.j) > (std::min)(e2.i, e2.j);
             }
             return e1max > e2max;
 

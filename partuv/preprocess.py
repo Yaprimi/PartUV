@@ -1,8 +1,8 @@
 import subprocess, os, time
-from .preprocess_utils.partfield_official.run_PF import PFInferenceModel
-from .preprocess_utils.PartField_pipeline import PF_pipeline
-from .preprocess_utils.manifold import fix_mesh_trimesh
-from .preprocess_utils.merge_V_obj import load_mesh_and_merge
+from preprocess_utils.partfield_official.run_PF import PFInferenceModel
+from preprocess_utils.PartField_pipeline import PF_pipeline
+from preprocess_utils.manifold import fix_mesh_trimesh
+from preprocess_utils.merge_V_obj import load_mesh_and_merge
 import shutil
 
 import argparse

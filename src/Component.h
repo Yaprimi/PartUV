@@ -1,7 +1,11 @@
+#include <iostream>
+#include <fstream>   // Fixes the 'out' uses undefined class error
+#include <string>    // Fixes the '<<' no global operator error
 
 #ifndef Component_H
 #define Component_H
 
+#include <igl/writeOBJ.h>
 #include <Eigen/Dense>
 #include <Eigen/Core>
 #include <vector>

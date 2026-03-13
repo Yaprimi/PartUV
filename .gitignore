@@ -11,7 +11,6 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -92,3 +91,5 @@ datasets*/
 scripts-archive/
 
 !demo/meshes/*.obj
+
+.venv/

@@ -44,6 +44,17 @@
 #include <CGAL/Polygon_mesh_processing/self_intersections.h>
 #include <CGAL/Polygon_mesh_processing/IO/polygon_mesh_io.h>
 #include <omp.h>
+
+#ifdef _MSC_VER
+#include <omp.h>
+// These functions don't exist in standard Windows OpenMP 2.0, 
+// so we define them here so the code compiles.
+inline int omp_get_thread_limit() { return 64; } 
+inline int omp_get_level() { return 0; }
+inline int omp_get_max_active_levels() { return 1; }
+inline int omp_get_ancestor_thread_num(int level) { return 0; }
+#endif
+
 #include <cmath>
 
 #include <iostream>
