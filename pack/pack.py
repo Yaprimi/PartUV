@@ -207,9 +207,9 @@ def pack_mesh(partuv_output_path, uvpackmaster=False, save_visuals=False, eval_m
         method = "uvpackmaster" if uvpackmaster else "blender"
         
         save_uv_layout_with_packing(uv_mesh_components, all_uv, os.path.join(partuv_output_path, f"final_packed_uv_{method}.png"), mode=new_uv_color,
-                                    image_size=8192, save_image=True)
+                                    image_size=2048, save_image=True)
         save_uv_layout_with_packing(uv_mesh_components, all_uv, os.path.join(partuv_output_path, f"distortion_{method}.png"), mode='area',
-                                image_size=8192, save_image=True)
+                                image_size=2048, save_image=True)
         
         print(f"saved uv layout to {os.path.join(partuv_output_path, f'final_packed_uv_{method}.png')}")
 
