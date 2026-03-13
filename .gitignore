@@ -93,3 +93,4 @@ scripts-archive/
 !demo/meshes/*.obj
 
 .venv/
+output/
