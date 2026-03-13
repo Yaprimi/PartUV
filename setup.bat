@@ -1,6 +1,22 @@
 @echo off
 
-set PYTHON_MAIN="D:\Python\python3.10.9\python.exe"
+REM ===================================================================================================================
+REM Ask for Python 3.10 folder
+REM ===================================================================================================================
+
+echo Enter the path to your Python 3.10 directory (e.g. C:\Python310\)
+echo.
+:get_python_path
+set /p PYTHON_FOLDER=Python 3.10 Directory: 
+
+if not exist "%PYTHON_FOLDER%\python.exe" (
+    echo.
+	echo   Can't find any python executable here '%PYTHON_FOLDER%\python.exe'.
+    echo.
+	goto get_python_path    
+) else (
+	set PYTHON_MAIN=%PYTHON_FOLDER%\python.exe
+)
 
 REM ---------------------------------------------------------------------------------------------------
 REM VENV & PIP
