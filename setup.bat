@@ -18,6 +18,30 @@ if not exist "%PYTHON_FOLDER%\python.exe" (
 	set PYTHON_MAIN=%PYTHON_FOLDER%\python.exe
 )
 
+REM ===================================================================================================================
+REM Check Python Version
+REM ===================================================================================================================
+
+for /f "tokens=2 delims= " %%v in ('%PYTHON_MAIN% --version') do set PYVER=%%v
+for /f "tokens=1,2 delims=." %%a in ("%PYVER%") do set PYSHORT=%%a.%%b
+
+if "%PYSHORT%"=="3.10" (
+    echo.
+    echo   Python %PYVER% is installed.
+	echo.
+) else (
+    echo.
+    echo   =====================================================================================
+    echo   The provided Python executable is %PYVER% (%PYTHON_MAIN%^)
+    echo.
+    echo   Please install Python 3.10: 
+    echo   https://www.python.org/ftp/python/3.10.9/python-3.10.9-amd64.exe
+    echo   =====================================================================================
+    echo.
+    pause
+    exit /b 1    
+)
+
 REM ---------------------------------------------------------------------------------------------------
 REM VENV & PIP
 REM ---------------------------------------------------------------------------------------------------
