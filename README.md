@@ -82,8 +82,9 @@ python run.py --mesh_path %MESH_PATH% ^
 
 You can replace the mesh path with your own `.obj` files to process different models.
 
-## Hyperparameters
-By default, the API reads all hyperparameters from config/config.yaml. See config.md for more details on hyperparameters and usage examples for customizing them to suit your needs.
+### Hyperparameters
+By default, the API reads all hyperparameters from `config/config.yaml`.
+See [config.md](doc/config.md) for more details on hyperparameters and usage examples for customizing them to suit your needs.
 
 ---
 
