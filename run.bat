@@ -4,7 +4,7 @@ call .venv\Scripts\activate
 
 set OCIO=
 
-set MESH_PATH="demo/meshes/table.obj"
+set MESH_PATH="demo/meshes/fruits.obj"
 set OUTPUT_PATH="output"
 
 python run.py --mesh_path %MESH_PATH% ^
