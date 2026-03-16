@@ -41,6 +41,49 @@ The setup script installs the required Python dependencies and configures the en
 
 ---
 
+# Example
+
+An example is provided to demonstrate how to run the tool.
+
+You can start the example by running:
+
+```bash
+run.bat
+```
+
+The `run.bat` file activates the virtual environment and launches the script using a sample mesh.
+
+You can modify the file to process other meshes by changing the `MESH_PATH` variable or adjusting the parameters.
+
+Example `run.bat`:
+
+```bat
+@echo off
+
+call .venv\Scripts\activate
+
+set OCIO=
+
+set MESH_PATH="demo/meshes/table.obj"
+set OUTPUT_PATH="output"
+
+python run.py --mesh_path %MESH_PATH% ^
+              --pack_method blender ^
+              --output_path %OUTPUT_PATH% ^
+              --save_visuals ^
+              --num_atlas 1
+```
+
+* `MESH_PATH` specifies the input mesh.
+* `OUTPUT_PATH` defines where the results will be written.
+* `--pack_method blender` uses Blender's UV packing method.
+* `--save_visuals` outputs visualization images.
+* `--num_atlas` defines how many atlases will be generated.
+
+You can replace the mesh path with your own `.obj` files to process different models.
+
+---
+
 # Credits
 
 Original project:
