@@ -13,7 +13,7 @@ There are two ways to get **PartUV** running on Windows: installing a prebuilt w
 
 ## Option A: Install prebuilt wheel (recommended)
 
-Prebuilt `.whl` files are published on the [Releases page](https://github.com/qornflex/PartUV/releases). Each wheel is self-contained — it already bundles the compiled `_core` extension along with its CUDA runtime, MSVC redistributable, and vcpkg-built dependency DLLs, so you don't need to install the CUDA Toolkit or a compiler to use it.
+Prebuilt `.whl` files are published on the [Releases page](https://github.com/Yaprimi/PartUV/releases). Each wheel is self-contained — it already bundles the compiled `_core` extension along with its CUDA runtime, MSVC redistributable, and vcpkg-built dependency DLLs, so you don't need to install the CUDA Toolkit or a compiler to use it.
 
 ### Prerequisites
 
@@ -22,7 +22,7 @@ Prebuilt `.whl` files are published on the [Releases page](https://github.com/qo
 
 ### Steps
 
-1. Download the latest `.whl` from the [Releases page](https://github.com/qornflex/PartUV/releases).
+1. Download the latest `.whl` from the [Releases page](https://github.com/Yaprimi/PartUV/releases).
 2. Install it into your virtual environment:
 
 ```bash
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 Clone the repository:
 
 ```bash
-git clone https://github.com/qornflex/PartUV.git
+git clone https://github.com/Yaprimi/PartUV.git
 ```
 
 ### Prerequisites
