@@ -1,35 +1,54 @@
 # PartUV (Windows Port)
 
-This repository is a fork of the original **PartUV** project:
+This repository is a fork of https://github.com/qornflex/PartUV, which is itself a fork of the original **PartUV** project:
 https://github.com/EricWang12/PartUV
 
 It provides a **Windows port** of the tool to simplify installation and usage on Windows systems.
 
 ---
 
-# Prerequisites
-
-Before installing, make sure the following dependencies are installed:
-
-### Python 3.10
-
-Download and install:
-https://www.python.org/ftp/python/3.10.9/python-3.10.9-amd64.exe
-
-### CUDA Toolkit 12.8
-
-Download and install:
-https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda_12.8.0_571.96_windows.exe
-
----
-
 # Installation (Windows)
+
+There are two ways to get **PartUV** running on Windows: installing a prebuilt wheel (fast, no compiler needed), or building from source (needed if you want to modify the C++/CUDA code).
+
+## Option A: Install prebuilt wheel (recommended)
+
+Prebuilt `.whl` files are published on the [Releases page](https://github.com/qornflex/PartUV/releases). Each wheel is self-contained — it already bundles the compiled `_core` extension along with its CUDA runtime, MSVC redistributable, and vcpkg-built dependency DLLs, so you don't need to install the CUDA Toolkit or a compiler to use it.
+
+### Prerequisites
+
+- **Python 3.10** — [download and install](https://www.python.org/ftp/python/3.10.9/python-3.10.9-amd64.exe)
+- **NVIDIA GPU with an up-to-date driver** (the CUDA runtime itself ships inside the wheel)
+
+### Steps
+
+1. Download the latest `.whl` from the [Releases page](https://github.com/qornflex/PartUV/releases).
+2. Install it into your virtual environment:
+
+```bash
+pip install --force-reinstall path\to\partuv-<version>-cp310-cp310-win_amd64.whl
+```
+
+3. Install the remaining Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Option B: Build from source
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/qornflex/PartUV.git
 ```
+
+### Prerequisites
+
+Before building, make sure the following dependencies are installed:
+
+- **Python 3.10** — [download and install](https://www.python.org/ftp/python/3.10.9/python-3.10.9-amd64.exe)
+- **CUDA Toolkit 12.8** — [download and install](https://developer.download.nvidia.com/compute/cuda/12.8.0/local_installers/cuda_12.8.0_571.96_windows.exe)
 
 Then run the setup script:
 
@@ -38,6 +57,8 @@ setup.bat
 ```
 
 The setup script installs the required Python dependencies and configures the environment to run **PartUV** on Windows.
+
+> **Note:** the repository also includes `bootstrap_env.ps1`, `build.bat`, and `build_wheel.bat` — a fully local, self-contained build toolchain (CMake, Ninja, VS Build Tools, CUDA, vcpkg, Python venv, all installed under `toolchain\` / `envs\` next to the scripts, nothing written to system PATH permanently). Use these if you want to rebuild `partuv` from source or produce your own wheel; see the comments at the top of `bootstrap_env.ps1` for usage and parameters.
 
 ---
 
@@ -92,3 +113,6 @@ See [config.md](doc/config.md) for more details on hyperparameters and usage exa
 
 Original project:
 https://github.com/EricWang12/PartUV
+
+Upstream fork (Windows port base):
+https://github.com/qornflex/PartUV
