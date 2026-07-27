@@ -57,9 +57,12 @@ extern/uvpackmaster/
 *.html
 *.zip
 
-# /extern/*
+# 1. Ignore everything under extern/ (eigen-3.4.0, libigl, stb -- plain clones made
+#    by bootstrap_env.ps1's Confirm-ExternDep, not committed in this repo)
+/extern/*
 
-# 2. But do not ignore the OpenABF folder itself
+# 2. But do not ignore the OpenABF folder itself (it IS committed directly, not a
+#    submodule/clone -- see bootstrap_env.ps1's comment on this)
 !/extern/OpenABF/
 
 # 3. Now ignore everything inside OpenABF again
@@ -94,3 +97,13 @@ scripts-archive/
 
 .venv/
 output/
+
+# Local build environment created by bootstrap_env.ps1 (machine-specific, not for git)
+toolchain/
+envs/
+_downloads/
+activate_env.bat
+
+# Compiled Python extension module and bundled runtime DLLs (delvewheel repair output)
+partuv/*.pyd
+partuv/*.dll

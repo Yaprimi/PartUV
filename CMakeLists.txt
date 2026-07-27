@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 
-include_directories("D:/Cpp/vcpkg/installed/x64-windows/include")
-
 # set(ENV{NVCC_PREPEND_FLAGS} "--allow-unsupported-compiler")
 # # (Optional) also initialize CMake's CUDA flags with it
 # set(CMAKE_CUDA_FLAGS_INIT "--allow-unsupported-compiler")
